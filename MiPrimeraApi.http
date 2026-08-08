@@ -1,0 +1,39 @@
+@MiPrimeraApi_HostAddress = http://localhost:5258
+//POSTS
+POST http://localhost:5258/puntajes
+Content-Type: application/json
+
+{
+  "jugador": "Mauricio",
+  "puntaje": 500
+}
+
+###
+POST http://localhost:5258/puntajes
+Content-Type: application/json
+
+{
+  "jugador": "Jorge",
+  "puntaje": 400
+}
+
+###
+POST http://localhost:5258/puntajes
+Content-Type: application/json
+
+{
+  "jugador": "Mateo",
+  "puntaje": 300
+}
+
+###
+PUT http://localhost:5258/puntajes/2
+Content-Type: application/json
+
+{
+  "valor": 700
+}
+
+###
+DELETE http://localhost:5258/puntajes/5
+Content-Type: application/json
