@@ -81,8 +81,6 @@ app.MapPut("/puntajes/{id}", (int id, ActualizarPuntajeDto puntaje) =>
     
     foreach (Puntajes p in puntajes)
     {
-        if (!puntajeValido)
-            break;
         
         if (id == p.Id)
         {
@@ -92,7 +90,10 @@ app.MapPut("/puntajes/{id}", (int id, ActualizarPuntajeDto puntaje) =>
             }
             else
             {
-                p.Puntaje = puntaje.Valor;
+                if (puntajeValido)
+                {
+                    p.Puntaje = puntaje.Valor;   
+                }
             }
             encontrado = true;
             break;
