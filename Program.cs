@@ -1,3 +1,6 @@
+using MiPrimeraApi;
+using MiPrimeraApi.Models;
+
 var builder = WebApplication.CreateBuilder(args); //configurador donde se registra lo que necesita el servidor (puerto, entorno, servicios ej: cors etc.)
 
 builder.Services.AddCors(options => //registra servicio CORS(Cross-Origin Resource Service)
@@ -10,6 +13,8 @@ builder.Services.AddCors(options => //registra servicio CORS(Cross-Origin Resour
     });
 });
 
+builder.Services.AddSingleton<PuntajesService>();
+
 var app = builder.Build(); //construye una aplicacion con las configuraciones del builder
 
 app.Use(async (context, next) =>
@@ -21,24 +26,24 @@ app.Use(async (context, next) =>
 
 app.UseCors("PermitirReact");
 
-var  puntajes = new List<Puntajes>();
+
 
 //select
-app.MapGet("/puntajes",() => Results.Ok(puntajes));
+app.MapGet("/puntajes",(PuntajesService servicio) => Results.Ok(servicio.ObtenerTodos()));
 
 //select jugador
-app.MapGet("/puntajes/{jugador}", (string jugador) =>
+app.MapGet("/puntajes/{jugador}", (string jugador, PuntajesService servicio) =>
 {
     if (jugador.Contains(" ") || jugador.Length < 3)
         return Results.BadRequest("El jugador debe contener mas de 3 letras y sin espacios");
 
-    bool contiene = puntajes.Any(p => p.Jugador == jugador);
+    bool contiene = servicio.ObtenerTodos().Any(p => p.Jugador == jugador);
     if (contiene == false)
     {
         return Results.NotFound("El jugador no existe");
     }
     
-    IEnumerable<Puntajes> encontrado = puntajes.Where(p => p.Jugador == jugador);
+    IEnumerable<Puntajes> encontrado = servicio.ObtenerTodos().Where(p => p.Jugador == jugador);
     
     return Results.Ok(encontrado);
 });
@@ -146,37 +151,4 @@ app.MapDelete("/puntajes/{id}", (int id) => {
 
 app.Run();
 
-record ActualizarPuntajeDto(int Valor); //clase cuyo unico proposito es trapasar datos de un lado al otro.
-public class Puntajes
-{
-    private static int contador = 1;
-    private int id;
-    private string jugador;
-    private int puntaje;
-
-    public int Id
-    {
-        get => id;
-        private set => id = value;
-    }
-    public string Jugador
-    {
-        get => jugador;
-        set => jugador = value;
-    }
-
-    public int Puntaje
-    {
-        get => puntaje;
-        set => puntaje = value;
-    }
-
-    public Puntajes(string jugador, int puntaje)
-    {
-        this.id = contador;
-        this.jugador = jugador;
-        this.puntaje = puntaje;
-        contador++;
-    }
-}
 
