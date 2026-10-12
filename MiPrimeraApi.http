@@ -1,5 +1,19 @@
 @MiPrimeraApi_HostAddress = http://localhost:5258
-//POSTS
+
+OPTIONS http://localhost:5258/puntajes
+Origin: http://localhost:5173
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: content-type
+
+###
+
+//GETS
+GET http://localhost:5258/puntajes
+
+ ###
+
+//POSTS  
+###
 POST http://localhost:5258/puntajes
 Content-Type: application/json
 

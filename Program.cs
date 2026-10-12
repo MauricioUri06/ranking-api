@@ -14,6 +14,13 @@ var app = builder.Build(); //construye una aplicacion con las configuraciones de
 
 app.UseCors("PermitirReact");
 
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Entrando: {context.Request.Method} {context.Request.Path}");
+    await next();
+    Console.WriteLine($"Saliendo: {context.Response.StatusCode}");
+});
+
 var  puntajes = new List<Puntajes>();
 
 //select
