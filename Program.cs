@@ -12,14 +12,14 @@ builder.Services.AddCors(options => //registra servicio CORS(Cross-Origin Resour
 
 var app = builder.Build(); //construye una aplicacion con las configuraciones del builder
 
-app.UseCors("PermitirReact");
-
 app.Use(async (context, next) =>
 {
     Console.WriteLine($"Entrando: {context.Request.Method} {context.Request.Path}");
     await next();
     Console.WriteLine($"Saliendo: {context.Response.StatusCode}");
 });
+
+app.UseCors("PermitirReact");
 
 var  puntajes = new List<Puntajes>();
 
